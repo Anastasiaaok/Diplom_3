@@ -20,28 +20,28 @@
 
     <dependencies>
 
-        <!-- Selenium -->
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
-        <!-- WebDriverManager -->
+
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.8.0</version>
         </dependency>
 
-        <!-- JUnit -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
         </dependency>
 
-        <!-- ALLURE -->
+
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit4</artifactId>
@@ -60,12 +60,12 @@
 
                 <configuration>
 
-                    <!-- КУДА СОХРАНЯТЬ allure -->
+
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
 
-                    <!-- ВОТ ЭТО САМОЕ ГЛАВНОЕ -->
+
                     <properties>
                         <property>
                             <name>listener</name>
@@ -77,7 +77,7 @@
 
             </plugin>
 
-            <!-- Allure plugin -->
+
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
