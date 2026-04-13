@@ -5,6 +5,8 @@ import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import pages.MainPage;
 
+import static org.junit.Assert.assertTrue;
+
 public class ConstructorTest extends BaseTest {
 
     @Test
@@ -13,6 +15,7 @@ public class ConstructorTest extends BaseTest {
     public void bunsTest() {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickBuns();
+        assertTrue(mainPage.isBunsActive());
     }
 
     @Test
@@ -21,6 +24,7 @@ public class ConstructorTest extends BaseTest {
     public void saucesTest() {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickSauces();
+        assertTrue(mainPage.isSaucesActive());
     }
 
     @Test
@@ -29,5 +33,6 @@ public class ConstructorTest extends BaseTest {
     public void fillingsTest() {
         MainPage mainPage = new MainPage(driver);
         mainPage.clickFillings();
+        assertTrue(mainPage.isFillingsActive());
     }
 }

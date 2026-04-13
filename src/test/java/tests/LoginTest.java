@@ -8,6 +8,9 @@ import pages.MainPage;
 
 public class LoginTest extends BaseTest {
 
+    private String email = "test@mail.com";
+    private String password = "123456";
+
     @Test
     @DisplayName("Вход через главную")
     @Description("Проверка входа через кнопку 'Войти в аккаунт'")
@@ -16,7 +19,7 @@ public class LoginTest extends BaseTest {
         main.clickLogin();
 
         LoginPage login = new LoginPage(driver);
-        login.login("test@mail.com", "123456");
+        login.login(email, password);
     }
 
     @Test
@@ -27,7 +30,34 @@ public class LoginTest extends BaseTest {
         main.clickPersonalAccount();
 
         LoginPage login = new LoginPage(driver);
-        login.login("test@mail.com", "123456");
+        login.login(email, password);
     }
 
+    @Test
+    @DisplayName("Вход через форму регистрации")
+    @Description("Проверка входа через кнопку в форме регистрации")
+    public void loginFromRegister() {
+        MainPage main = new MainPage(driver);
+        main.clickLogin();
+
+        LoginPage login = new LoginPage(driver);
+        login.clickRegister();
+        login.clickLoginFromRegister();
+
+        login.login(email, password);
+    }
+
+    @Test
+    @DisplayName("Вход через восстановление пароля")
+    @Description("Проверка входа через кнопку в форме восстановления пароля")
+    public void loginFromForgotPassword() {
+        MainPage main = new MainPage(driver);
+        main.clickLogin();
+
+        LoginPage login = new LoginPage(driver);
+        login.clickForgotPassword();
+        login.clickLoginFromRegister();
+
+        login.login(email, password);
+    }
 }
