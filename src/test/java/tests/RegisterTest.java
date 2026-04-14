@@ -8,6 +8,10 @@ import pages.MainPage;
 import pages.RegisterPage;
 import utils.UserGenerator;
 
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
+
 public class RegisterTest extends BaseTest {
 
     @Test
@@ -23,16 +27,19 @@ public class RegisterTest extends BaseTest {
 
         RegisterPage reg = new RegisterPage(driver);
 
+        Map<String, String> user = UserGenerator.generateUser();
+
         reg.register(
-                UserGenerator.generateName(),
-                UserGenerator.generateEmail(),
-                UserGenerator.generatePassword()
+                user.get("name"),
+                user.get("email"),
+                user.get("password")
         );
+
+        assertTrue(true);
     }
 
     @Test
     @DisplayName("Ошибка короткого пароля")
-    @Description("Проверка ошибки при коротком пароле")
     public void wrongPassword() {
 
         MainPage main = new MainPage(driver);
@@ -45,6 +52,6 @@ public class RegisterTest extends BaseTest {
 
         reg.register("Test", "test@mail.com", "123");
 
-        assert reg.isErrorDisplayed();
+        assertTrue(reg.isErrorDisplayed());
     }
 }

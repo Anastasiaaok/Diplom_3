@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -23,6 +24,7 @@ public class RegisterPage {
     private By registerButton = By.xpath("//button[text()='Зарегистрироваться']");
     private By error = By.xpath("//p[contains(text(),'Некорректный пароль')]");
 
+    @Step("Регистрация пользователя")
     public void register(String n, String e, String p) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(name)).sendKeys(n);
         driver.findElement(email).sendKeys(e);
@@ -30,6 +32,7 @@ public class RegisterPage {
         driver.findElement(registerButton).click();
     }
 
+    @Step("Проверка ошибки пароля")
     public boolean isErrorDisplayed() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(error)).isDisplayed();
     }

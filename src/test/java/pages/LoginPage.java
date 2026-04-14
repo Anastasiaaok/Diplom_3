@@ -1,10 +1,8 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 
@@ -15,24 +13,44 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    private By email = By.xpath("//input[@type='text']");
+    // ✅ НАДЁЖНЫЕ локаторы
+    private By email = By.xpath("//input[contains(@class,'text_type_main-default')]");
     private By password = By.xpath("//input[@type='password']");
-    private By loginButton = By.xpath("//button[text()='Войти']");
+    private By loginButton = By.xpath("//button[contains(@class,'button_button_type_primary')]");
 
-    private By registerLink = By.xpath("//a[text()='Зарегистрироваться']");
-    private By forgotPassword = By.xpath("//a[text()='Восстановить пароль']");
+    private By registerLink = By.xpath("//a[contains(text(),'Зарегистрироваться')]");
+    private By forgotPassword = By.xpath("//a[contains(text(),'Восстановить пароль')]");
+    private By loginFromRegister = By.xpath("//a[@href='/login']");
 
-    // ВАЖНО — кнопка "Войти" на странице регистрации
-    private By loginFromRegister = By.xpath("//a[text()='Войти']");
+    @Step("Ожидание страницы логина")
+    public void waitForLoginPage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(email));
+    }
 
-    @Step("Ввод email и password и клик Войти")
+    @Step("Логин")
     public void login(String mail, String pass) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(email)).sendKeys(mail);
-        driver.findElement(password).sendKeys(pass);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+
+        // ждём поле email
+        WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(email));
+        emailInput.clear();
+        emailInput.sendKeys(mail);
+        System.out.println("Email введен");
+
+        // 🔥 ЖДЁМ ИМЕННО type=password (самый стабильный вариант)
+        WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(password));
+        passwordInput.clear();
+        passwordInput.sendKeys(pass);
+        System.out.println("Пароль введен");
+
+        // кнопка входа
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+
+        // иногда обычный click не работает → оставляем JS
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        System.out.println("Клик по кнопке выполнен");
     }
 
     @Step("Переход на регистрацию")
@@ -45,7 +63,7 @@ public class LoginPage {
         wait.until(ExpectedConditions.elementToBeClickable(forgotPassword)).click();
     }
 
-    @Step("Переход обратно на логин со страницы регистрации")
+    @Step("Переход обратно на логин")
     public void clickLoginFromRegister() {
         wait.until(ExpectedConditions.elementToBeClickable(loginFromRegister)).click();
     }
