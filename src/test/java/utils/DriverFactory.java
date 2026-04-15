@@ -13,11 +13,6 @@ public class DriverFactory {
             return new ChromeDriver();
         }
 
-        if (browser.equalsIgnoreCase("yandex")) {
-            WebDriverManager.chromedriver().setup();
-            return new ChromeDriver(); // Яндекс = Chromium
-        }
-
         throw new RuntimeException("Browser not supported");
     }
 }

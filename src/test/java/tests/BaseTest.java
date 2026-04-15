@@ -1,44 +1,47 @@
 package tests;
 
 import api.UserClient;
-import io.qameta.allure.Step;
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
+import model.User;
+import utils.UserGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import utils.DriverFactory;
-import utils.UserGenerator;
-
-import java.util.Map;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class BaseTest {
 
     protected WebDriver driver;
+    protected UserClient userClient;
+    protected User user;
     protected String accessToken;
-    protected Map<String, String> user;
-
-    protected UserClient userClient = new UserClient();
-
-    @Step("Открытие главной страницы")
-    public void openMainPage() {
-        driver.get("https://stellarburgers.education-services.ru/");
-    }
 
     @Before
     public void setUp() {
-        driver = DriverFactory.getDriver("chrome");
+        driver = new ChromeDriver();
+
+        // ✅ ВОТ ЭТО КРИТИЧНО
         driver.manage().window().maximize();
-        openMainPage();
+        driver.get("https://stellarburgers.education-services.ru/");
 
-        // создаём пользователя
-        user = UserGenerator.generateUser();
+        RestAssured.baseURI = "https://stellarburgers.education-services.ru";
+        RestAssured.filters(new AllureRestAssured());
 
-        var response = userClient.createUser(
-                user.get("email"),
-                user.get("password"),
-                user.get("name")
+        userClient = new UserClient();
+
+        var userData = UserGenerator.generateUser();
+
+        user = new User(
+                userData.get("email"),
+                userData.get("password"),
+                userData.get("name")
         );
 
-        accessToken = response.then().extract().path("accessToken");
+        accessToken = userClient.createUser(user)
+                .then()
+                .extract()
+                .path("accessToken");
     }
 
     @After
@@ -46,9 +49,6 @@ public class BaseTest {
         if (accessToken != null) {
             userClient.deleteUser(accessToken);
         }
-
-        if (driver != null) {
-            driver.quit();
-        }
+        driver.quit();
     }
 }
